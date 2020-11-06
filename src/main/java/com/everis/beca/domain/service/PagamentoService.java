@@ -35,28 +35,21 @@ public class PagamentoService {
 	public Pagamento consultarValor(Long idEntrada) {
 		Entrada entrada = consultarEntrada(idEntrada);
 		entrada.setId(idEntrada);
-		Pagamento pagamento = calculaValorDePagamento(entrada);
+		Pagamento pagamento = new Pagamento();
+		pagamento = calculaValorDePagamento(entrada, pagamento);
 		return pagamento;
 	}
-
-//	public List<Pagamento> buscarPorCliente(Long idCliente) {
-//		
-//	}
-//	
-//	public List<Pagamento> buscarPorVeiculo(Long idVeiculo) {
-//		
-//	}
-//	
-	public Pagamento salvar(Long idEntrada, BigDecimal valorPagamento) {
+	
+	public Pagamento salvar(Long idEntrada, Pagamento pagamento) {
 		Entrada entrada = consultarEntrada(idEntrada);
 		entrada.setId(idEntrada);
+		
 		entrada.setDataHoraSaida(OffsetDateTime.now());
-		Pagamento pagamento = calculaValorDePagamento(entrada);
-		pagamento.setValorPagamento(valorPagamento);
+		pagamento = calculaValorDePagamento(entrada, pagamento);
+		entrada.setPagamento(pagamento);
 		
-		
+		pagamento = pagamentoRepository.save(pagamento);
 		entradaService.salvar(entrada);
-		pagamentoRepository.save(pagamento);
 		
 		return pagamento;
 	}
@@ -72,14 +65,15 @@ public class PagamentoService {
 	public Entrada consultarEntrada(Long idEntrada) {
 		Entrada entrada = entradaService.buscar(idEntrada)
 				.orElseThrow(() -> new RegraDeNegocioException("Entrada não encontrada no sistema"));
+		
 		if (entrada.getDataHoraSaida() != null) {
 			throw new RegraDeNegocioException("Já foi feito o pagamento para a entrada " + idEntrada);
 		}
+		
 		return entrada;
 	}
 
-	public Pagamento calculaValorDePagamento(Entrada entrada) {
-		Pagamento pagamento = new Pagamento();
+	public Pagamento calculaValorDePagamento(Entrada entrada, Pagamento pagamento) {
 		Long momentoEntradaEmSegundos = entrada.getDataHoraEntrada().toEpochSecond();
 		Long momentoPagamentoEmSegundos = OffsetDateTime.now().toEpochSecond();
 		pagamento.setEntradaId(entrada.getId());

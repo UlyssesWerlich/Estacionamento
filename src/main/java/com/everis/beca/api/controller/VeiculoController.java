@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.everis.beca.api.model.VeiculoInputRepresentModel;
+import com.everis.beca.api.model.VeiculoInputDTO;
 import com.everis.beca.api.utils.VeiculoModelMapper;
 import com.everis.beca.domain.model.Veiculo;
 import com.everis.beca.domain.service.VeiculoService;
@@ -56,7 +56,7 @@ public class VeiculoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Veiculo> cadastrar(@Valid @RequestBody VeiculoInputRepresentModel veiculoRepresent){
+	public ResponseEntity<Veiculo> cadastrar(@Valid @RequestBody VeiculoInputDTO veiculoRepresent){
 		Veiculo veiculo = veiculoModelMapper.converterParaModelo(veiculoRepresent);
 		veiculo = veiculoService.salvar(veiculo);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(veiculo.getId())
@@ -65,7 +65,7 @@ public class VeiculoController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Veiculo> alterar(@Valid @RequestBody VeiculoInputRepresentModel veiculoRepresent, @PathVariable Long id){
+	public ResponseEntity<Veiculo> alterar(@Valid @RequestBody VeiculoInputDTO veiculoRepresent, @PathVariable Long id){
 		if (!veiculoService.existe(id)) {
 			return ResponseEntity.notFound().build();
 		}

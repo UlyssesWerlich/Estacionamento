@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.everis.beca.api.model.EntradaInputRepresentModel;
+import com.everis.beca.api.model.EntradaInputDTO;
+import com.everis.beca.api.model.EntradaOutputDTO;
 import com.everis.beca.api.utils.EntradaModelMapper;
 import com.everis.beca.domain.model.Entrada;
 import com.everis.beca.domain.service.EntradaService;
@@ -33,48 +34,54 @@ public class EntradaController {
 	private EntradaModelMapper entradaModelMapper = new EntradaModelMapper();
 	
 	@GetMapping
-	public List<Entrada> listar(){
-		return entradaService.listar();
+	public List<EntradaOutputDTO> listar(){
+		return entradaModelMapper.converterListaParaDTO(entradaService.listar());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Entrada> buscar(@PathVariable Long id){
-		Optional<Entrada> entradas = entradaService.buscar(id);
-		if (!entradas.isPresent()) {
+	public ResponseEntity<EntradaOutputDTO> buscar(@PathVariable Long id){
+		Optional<Entrada> entrada = entradaService.buscar(id);
+		if (!entrada.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(entradas.get());
+		return ResponseEntity.ok(entradaModelMapper.converterParaDTO(entrada.get()));
+	}
+	
+	@GetMapping("/abertos")
+	public List<EntradaOutputDTO> listarPorAbertos(){
+		List<Entrada> entradas = entradaService.listarPorAbertos();
+		return entradaModelMapper.converterListaParaDTO(entradas);
 	}
 	
 	@GetMapping("/cliente/{idCliente}")
-	public List<Entrada> buscarPorCliente(@PathVariable Long idCliente){
-		List<Entrada> entradas = entradaService.buscarPorCliente(idCliente);
-		return entradas;
+	public List<EntradaOutputDTO> listarPorCliente(@PathVariable Long idCliente){
+		List<Entrada> entradas = entradaService.listarPorCliente(idCliente);
+		return entradaModelMapper.converterListaParaDTO(entradas);
 	}
 	
 	@GetMapping("/veiculo/{idVeiculo}")
-	public List<Entrada> buscarPorVeiculo(@PathVariable Long idVeiculo){
-		List<Entrada> entradas = entradaService.buscarPorCliente(idVeiculo);
-		return entradas;
+	public List<EntradaOutputDTO> listarPorVeiculo(@PathVariable Long idVeiculo){
+		List<Entrada> entradas = entradaService.listarPorCliente(idVeiculo);
+		return entradaModelMapper.converterListaParaDTO(entradas);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Entrada> cadastrar(@Valid @RequestBody EntradaInputRepresentModel entradaRepresent){
+	public ResponseEntity<EntradaOutputDTO> cadastrar(@Valid @RequestBody EntradaInputDTO entradaRepresent){
 		Entrada entrada = entradaModelMapper.converterParaModelo(entradaRepresent);
 		entrada = entradaService.salvar(entrada);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entrada.getId())
 				.toUri();
-		return ResponseEntity.created(uri).body(entrada);
+		return ResponseEntity.created(uri).body(entradaModelMapper.converterParaDTO(entrada));
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Entrada> alterar(@Valid @RequestBody EntradaInputRepresentModel entradaRepresent, @PathVariable Long id){
+	public ResponseEntity<EntradaOutputDTO> alterar(@Valid @RequestBody EntradaInputDTO entradaRepresent, @PathVariable Long id){
 		if (!entradaService.existe(id)) {
 			return ResponseEntity.notFound().build();
 		}
 		Entrada entrada = entradaModelMapper.converterParaModelo(entradaRepresent);
 		entrada.setId(id);
-		return ResponseEntity.ok(entradaService.salvar(entrada));				
+		return ResponseEntity.ok(entradaModelMapper.converterParaDTO(entrada));				
 	}
 	
 	@DeleteMapping("/{id}")

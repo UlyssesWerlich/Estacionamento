@@ -3,7 +3,7 @@ package com.everis.beca.api.model;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class VeiculoInputRepresentModel {
+public class VeiculoInputDTO {
 	
 	@NotBlank
 	private String placa;

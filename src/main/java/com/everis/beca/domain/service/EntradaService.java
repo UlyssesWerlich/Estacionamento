@@ -32,12 +32,16 @@ public class EntradaService {
 	public Optional<Entrada> buscar(Long id) {
 		return entradaRepository.findById(id);
 	}
+	
+	public List<Entrada> listarPorAbertos() {
+		return entradaRepository.findByPagamento(null);
+	}
 
-	public List<Entrada> buscarPorCliente(Long idCliente) {
+	public List<Entrada> listarPorCliente(Long idCliente) {
 		return entradaRepository.findByCliente(new Cliente(idCliente));
 	}
 	
-	public List<Entrada> buscarPorVeiculo(Long idVeiculo) {
+	public List<Entrada> listarPorVeiculo(Long idVeiculo) {
 		return entradaRepository.findByVeiculo(new Veiculo(idVeiculo));
 	}
 
@@ -62,10 +66,5 @@ public class EntradaService {
 
 	public boolean existe(Long id) {
 		return entradaRepository.existsById(id);
-	}
-	
-//	public boolean existe(String placa) {
-//		return entradaRepository.findByPlaca(placa).isPresent();
-//	}
-//	
+	}	
 }

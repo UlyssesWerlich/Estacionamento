@@ -20,12 +20,12 @@ public class ClienteService {
 		return clienteRepository.findAll();
 	}
 	
-	public Optional<Cliente> buscar(Long id) {
-		return clienteRepository.findById(id);
+	public List<Cliente> listarPorNome(String nome) {
+		return clienteRepository.findByNomeContaining(nome);
 	}
 	
-	public List<Cliente> buscarPorNome(String nome) {
-		return clienteRepository.findByNomeContaining(nome);
+	public Optional<Cliente> buscar(Long id) {
+		return clienteRepository.findById(id);
 	}
 	
 	public Optional<Cliente> buscarPorCpf(String cpf) {
