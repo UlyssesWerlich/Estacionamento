@@ -2,7 +2,7 @@ package com.everis.beca.api.model;
 
 import javax.validation.constraints.NotBlank;
 
-public class ClienteNome {
+public class ClienteNomeInputDTO {
 	
 	@NotBlank
 	private String nome;

@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.everis.beca.api.model.ClienteNome;
+import com.everis.beca.api.model.ClienteInputDTO;
+import com.everis.beca.api.model.ClienteNomeInputDTO;
+import com.everis.beca.api.utils.ClienteModelMapper;
 import com.everis.beca.domain.model.Cliente;
 import com.everis.beca.domain.service.ClienteService;
 
@@ -29,9 +31,16 @@ public class ClienteController {
 	@Autowired
 	private ClienteService clienteService;
 	
+	private ClienteModelMapper clienteModelMapper = new ClienteModelMapper();
+	
 	@GetMapping
 	public List<Cliente> listar(){
 		return clienteService.listar();
+	}
+	
+	@GetMapping("/nome")
+	public List<Cliente> buscarPorNome(@Valid @RequestBody ClienteNomeInputDTO clienteNome) {
+		return clienteService.listarPorNome(clienteNome.getNome());
 	}
 	
 	@GetMapping("/{id}")
@@ -52,24 +61,20 @@ public class ClienteController {
 		return ResponseEntity.ok(cliente.get());
 	}
 	
-	@GetMapping("/nome")
-	public List<Cliente> buscarPorNome(@Valid @RequestBody ClienteNome cliente) {
-		return clienteService.buscarPorNome(cliente.getNome());
-	}
-	
 	@PostMapping
-	public ResponseEntity<Cliente> cadastrar(@Valid @RequestBody Cliente cliente) {
-		clienteService.salvar(cliente);
+	public ResponseEntity<Cliente> cadastrar(@Valid @RequestBody ClienteInputDTO clienteDTO) {
+		Cliente cliente = clienteService.salvar(clienteModelMapper.converterParaModelo(clienteDTO));
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId())
 				.toUri();
 		return ResponseEntity.created(uri).body(cliente);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Cliente> alterar(@Valid @RequestBody Cliente cliente, @PathVariable Long id) {
+	public ResponseEntity<Cliente> alterar(@Valid @RequestBody ClienteInputDTO clienteDTO, @PathVariable Long id) {
 		if (!clienteService.existe(id)) {
 			return ResponseEntity.notFound().build();
 		}
+		Cliente cliente = clienteService.salvar(clienteModelMapper.converterParaModelo(clienteDTO));
 		cliente.setId(id);
 		return ResponseEntity.ok(clienteService.alterar(cliente)) ;
 	}
@@ -79,7 +84,6 @@ public class ClienteController {
 		if (!clienteService.existe(id)) {
 			return ResponseEntity.notFound().build();
 		}
-		
 		clienteService.excluir(id);
 		return ResponseEntity.noContent().build();
 	}

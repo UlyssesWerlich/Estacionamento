@@ -29,7 +29,8 @@ public class Entrada {
 
 	private OffsetDateTime dataHoraSaida;
 
-	private Long idPagamento;
+	@OneToOne
+	private Pagamento pagamento;
 
 	public Long getId() {
 		return id;
@@ -71,12 +72,11 @@ public class Entrada {
 		this.dataHoraSaida = dataHoraSaida;
 	}
 
-	public Long getIdPagamento() {
-		return idPagamento;
+	public Pagamento getPagamento() {
+		return pagamento;
 	}
 
-	public void setIdPagamento(Long idPagamento) {
-		this.idPagamento = idPagamento;
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
 	}
-
 }

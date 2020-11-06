@@ -2,7 +2,7 @@ package com.everis.beca.api.model;
 
 import javax.validation.constraints.NotNull;
 
-public class EntradaInputRepresentModel {
+public class EntradaInputDTO {
 	
 	@NotNull
 	private Long veiculoId;
