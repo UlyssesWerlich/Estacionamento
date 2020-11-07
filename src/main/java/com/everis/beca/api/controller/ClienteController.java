@@ -74,9 +74,9 @@ public class ClienteController {
 		if (!clienteService.existe(id)) {
 			return ResponseEntity.notFound().build();
 		}
-		Cliente cliente = clienteService.salvar(clienteModelMapper.converterParaModelo(clienteDTO));
+		Cliente cliente = clienteModelMapper.converterParaModelo(clienteDTO);
 		cliente.setId(id);
-		return ResponseEntity.ok(clienteService.alterar(cliente)) ;
+		return ResponseEntity.ok(clienteService.salvar(cliente)) ;
 	}
 	
 	@DeleteMapping("/{id}")

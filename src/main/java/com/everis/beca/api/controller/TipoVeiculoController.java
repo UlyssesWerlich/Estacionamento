@@ -70,7 +70,7 @@ public class TipoVeiculoController {
 			return ResponseEntity.notFound().build();
 		}
 		tipoVeiculo.setId(id);
-		return ResponseEntity.ok(tipoVeiculoService.alterar(tipoVeiculo));
+		return ResponseEntity.ok(tipoVeiculoService.salvar(tipoVeiculo));
 	}
 	
 	@DeleteMapping("/{id}")
