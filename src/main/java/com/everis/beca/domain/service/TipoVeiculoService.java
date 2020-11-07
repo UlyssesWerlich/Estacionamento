@@ -45,10 +45,6 @@ public class TipoVeiculoService {
 		}
 		return tipoVeiculoRepository.save(tipoVeiculo);
 	}
-	
-	public TipoVeiculo alterar(TipoVeiculo tipoVeiculo) {
-		return tipoVeiculoRepository.save(tipoVeiculo);
-	}
 
 	public void excluir(Long id) {
 		tipoVeiculoRepository.deleteById(id);

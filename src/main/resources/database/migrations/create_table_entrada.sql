@@ -1,15 +1,11 @@
-CREATE TABLE `entrada` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `data_hora_entrada` datetime(6) NOT NULL,
-  `data_hora_saida` datetime(6) DEFAULT NULL,
-  `cliente_id` bigint NOT NULL,
-  `pagamento_id` bigint DEFAULT NULL,
-  `veiculo_id` bigint NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKgfasx2tg2dokk47bm05kboo82` (`cliente_id`),
-  KEY `FKikoeipwaqy2ucln0smr7fwq9x` (`pagamento_id`),
-  KEY `FKsklmk1e6y17d5jdld237kuyks` (`veiculo_id`),
-  CONSTRAINT `FKgfasx2tg2dokk47bm05kboo82` FOREIGN KEY (`cliente_id`) REFERENCES `cliente` (`id`),
-  CONSTRAINT `FKikoeipwaqy2ucln0smr7fwq9x` FOREIGN KEY (`pagamento_id`) REFERENCES `pagamento` (`id`),
-  CONSTRAINT `FKsklmk1e6y17d5jdld237kuyks` FOREIGN KEY (`veiculo_id`) REFERENCES `veiculo` (`id`)
+create table entrada (
+  id bigint primary key not null auto_increment,
+  data_hora_entrada datetime(6) not null,
+  data_hora_saida datetime(6) default null,
+  cliente_id bigint not null,
+  pagamento_id bigint default null,
+  veiculo_id bigint not null,
+  foreign key (cliente_id) references cliente (id),
+  foreign key (pagamento_id) references pagamento (id),
+  foreign key (veiculo_id) references veiculo (id)
 )

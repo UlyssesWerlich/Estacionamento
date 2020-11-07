@@ -38,10 +38,6 @@ public class ClienteService {
 		}
 		return clienteRepository.save(cliente);
 	}
-	
-	public Cliente alterar(Cliente cliente) {
-		return clienteRepository.save(cliente);
-	}
 
 	public void excluir(Long id) {
 		clienteRepository.deleteById(id);
