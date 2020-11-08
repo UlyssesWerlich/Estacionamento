@@ -40,7 +40,7 @@ public class TipoVeiculoService {
 	}
 	
 	public TipoVeiculo salvar(TipoVeiculo tipoVeiculo) {
-		if (existe(tipoVeiculo.getNome())) {
+		if (existe(tipoVeiculo.getNome()) && tipoVeiculo.getId() != buscar(tipoVeiculo.getNome()).get().getId()) {
 			throw new RegraDeNegocioException("Tipo de veículo já existe no sistema");
 		}
 		return tipoVeiculoRepository.save(tipoVeiculo);

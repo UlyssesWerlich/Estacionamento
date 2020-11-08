@@ -33,7 +33,7 @@ public class VeiculoService {
 	}
 
 	public Veiculo salvar(Veiculo veiculo) {
-		if (existe(veiculo.getPlaca())) {
+		if (existe(veiculo.getPlaca()) && veiculo.getId() != buscarPorPlaca(veiculo.getPlaca()).get().getId()) {
 			throw new RegraDeNegocioException("Placa já existe no sistema");
 		}
 		
