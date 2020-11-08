@@ -33,7 +33,7 @@ public class ClienteService {
 	}
 
 	public Cliente salvar(Cliente cliente) {
-		if (existe(cliente.getCpf())) {
+		if (existe(cliente.getCpf()) && cliente.getId() != buscarPorCpf(cliente.getCpf()).get().getId()) {
 			throw new RegraDeNegocioException("CPF já existe no sistema");
 		}
 		return clienteRepository.save(cliente);
